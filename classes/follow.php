@@ -15,7 +15,7 @@ class Follow extends database
         $sql2 = "INSERT INTO follow(`user_id`,`following`) VALUE ('$user_id','$follow_id');";
 
         if ($this->conn->query($sql2)) {
-            header('Location: ../views/follow.php');
+            header('Location: ../views/userInfoPosts.php?id=' . $follow_id);
         } else {
             die('ERROR :following ' . $this->conn->error);
         }
@@ -47,6 +47,38 @@ class Follow extends database
             return $result;
         } else {
             die('ERROR: getting following user  ' . $this->conn->error);
+        }
+    }
+
+    public function checkFollow($user_id, $follow_id)
+    {
+        $sql = "SELECT `following` from follow WHERE `user_id` = $user_id AND `following` = $follow_id;";
+        if ($result = $this->conn->query($sql)) {
+            // print_r($result);
+            return $result;
+        } else {
+            die('Error checking following user   ' . $this->conn->error);
+        }
+    }
+
+    public function unfollow($user_id, $unfollow_id)
+    {
+        $sql = "DELETE FROM follow WHERE `user_id` = $user_id and `following` = $unfollow_id";
+        if ($this->conn->query($sql)) {
+            header('Location: ../views/home.php');
+            exit;
+        } else {
+            die('error unfollowing ' . $this->conn->error);
+        }
+    }
+
+    public function getFollower($id)
+    {
+        $sql = "SELECT `following` from follow WHERE `following` = $id ";
+        if ($result = $this->conn->query($sql)) {
+            return $result;
+        } else {
+            die('ERROR: getting follower user  ' . $this->conn->error);
         }
     }
 }

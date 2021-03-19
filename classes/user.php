@@ -4,8 +4,6 @@ require_once "database.php";
 
 class User extends Database
 {
-
-
     public function login($email, $password)
     {
         $sql = "SELECT id,first_name,last_name,username,email,`image`,`password` FROM users WHERE email = '$email'";
@@ -26,7 +24,6 @@ class User extends Database
             if (password_verify($password, $user_details['password'])) { //ユーザー名とパスワードが一致
                 //correct password
                 session_start();
-
                 $_SESSION['user_id'] = $user_details['id'];
                 $_SESSION['username'] = $user_details['username'];
                 $_SESSION['first_name'] = $user_details['first_name'];
@@ -34,22 +31,24 @@ class User extends Database
                 $_SESSION['icon'] = $user_details['image'];
                 $_SESSION['email'] = $user_details['email'];
                 $_SESSION['password'] = $user_details['password'];
-
                 header("location: ../views/home.php"); //go to undex.php / login page
             } else {
+                // const alertClass = document.getElementsByClassName('alert')[0];
+                // alertClass.classList.remove('d-none');
                 //not correct password
-                echo "exist account but wrang password";
+                // echo "exist account but wrang password";
+                header('Location: ../views/index.php?err=1');
+                exit;
             }
-            // }
         } else {
-            echo "Not exist account in this username<br>";
+            // echo "Not exist account in this username<br>"
+            header('Location: ../views/index.php?err=1');
+            exit;
         }
     }
 
     public function createUser($newFirstName, $newLastName, $newUserName, $newEmail, $newImage, $newImageTmp, $newPassword)
     {
-
-
         //It need because fullname and email are unique.
         $sql1 = "SELECT id,first_name,last_name,username,email,`image` from users WHERE email =  $newEmail "; //database information
         $sql2 = "SELECT id,first_name,last_name,username,email,`image` from users WHERE first_name =  $newFirstName AND last_name = $newLastName "; //database information
@@ -63,14 +62,13 @@ class User extends Database
 
         if ($newImageTmp == null) { //user追加のSQL文
             // $newImage = "../images/default.jpg";//69 and didn't work
+            // $_SESSION['icon']
             $sql3 = "INSERT INTO users(first_name,last_name,username,email,`password`) VALUES ('$newFirstName','$newLastName','$newUserName','$newEmail','$newPassword')";
         } else {
             $sql3 = "INSERT INTO users(first_name,last_name,username,email,`image`,`password`) VALUES ('$newFirstName','$newLastName','$newUserName','$newEmail','$newImage','$newPassword')";
             $destination = "../images/" . basename($newImage);
             move_uploaded_file($newImageTmp, $destination); //if i didn't select a picture,the function didn't work
         }
-
-
         if ($this->conn->query($sql3)) {
             //The sql for session
             $sql4 = "SELECT id,first_name,last_name,username,email,`image`,`password` FROM users WHERE username = '$newUserName'";
@@ -87,8 +85,16 @@ class User extends Database
             $_SESSION['icon'] = $user_details['image'];
             $_SESSION['email'] = $user_details['email'];
             $_SESSION['password'] = $user_details['password'];
-            header("location: ../views/home.php");
-            exit;
+
+            $id = $user_details['id'];
+
+            $sql6 = "INSERT INTO follow(`user_id`,`following`) VALUES ($id,$id);";
+            if ($this->conn->query($sql6)) {
+                header("location: ../views/home.php");
+                exit;
+            } else {
+                die('Error inserting follow:' . $this->conn->error);
+            }
         } else {
             die("Error create user: " . $this->conn->error);
         }
@@ -162,6 +168,45 @@ class User extends Database
             return $result;
         } else {
             die("ERROR:searching username");
+        }
+    }
+
+    public function getUser($id)
+    {
+        $sql = "SELECT * from users WHERE id = $id";
+
+        if ($result = $this->conn->query($sql)) {
+            return $result->fetch_assoc();
+        } else {
+            die('Error selecting username : ' . $this->conn->error);
+        }
+    }
+
+
+    public function getUserImage($id)
+    {
+        $sql = "SELECT `image` from users WHERE id = $id;";
+
+        if ($result = $this->conn->query($sql)) {
+            return $result->fetch_assoc();
+        } else {
+            die('Error selecting userImage  : ' . $this->conn->error);
+        }
+    }
+
+    public function deleteUser($id)
+    {
+        $sql = "DELETE FROM users WHERE id = $id";
+        if ($this->conn->query($sql)) {
+            $sql2 = "DELETE FROM follow WHERE `following` = $id";
+            if ($this->conn->query($sql2)) {
+                session_unset();
+                session_destroy();
+                header('Location: ../views/index.php');
+                exit;
+            }
+        } else {
+            die('Error deleting user' . $this->conn->error);
         }
     }
 }

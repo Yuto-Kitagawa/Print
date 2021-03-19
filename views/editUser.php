@@ -11,12 +11,14 @@ session_start();
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css4.6/bootstrap.css">
+    <link rel="stylesheet" href="../../css4.6/modal/modal.css">
     <title>Document</title>
 </head>
 <style>
     #icon {
         display: none;
     }
+
     .font {
         font-family: "Showcard Gothic";
         font-size: 40px;
@@ -33,13 +35,13 @@ session_start();
             <div class="ml-auto">
                 <ul class="navbar-nav">
                     <!-- <li class="nav-item"><a href="../views/profile.php" class="nav-link openmodal">USERNAME: </a></li> -->
-                    <li type="button" class="nav-item openModal pt-2 text-white mr-4"><?= $_SESSION['username'] ?></li>
+                    <li type="button" class="nav-item pt-2 text-white mr-4"><?= $_SESSION['username'] ?></li>
                     <li class="nav-item"><a href="../actions/logout.php" class="btn btn-outline-warning btn-sm nav-link text-warning">Log Out</a></li>
                 </ul>
             </div>
         </nav>
-        <div class="pt-5 w-50 mx-auto ">
-            <p class="text-center h2">Edit Your Profile</p>
+        <div class="pt-5 col-lg-6 col-md-9 mx-auto ">
+            <p class="text-center h2 font">Edit Your Profile</p>
             <div class="card">
                 <div class="card-content p-5">
                     <form action="../actions/editUser.php" method="POST" enctype="multipart/form-data">
@@ -56,16 +58,36 @@ session_start();
                             <label style="margin:0;" for="icon" id="icon_label" class="file_input w-100 btn btn-outline-warning text-left bg-warning text-white ">SELECT ICON</label>
                             <label style="margin:0;white-space:nowrap;user-select:none;" class=" w-100 mb-1 text-right text-danger d-block">※You need not to decide.</label>
                         </div>
-
-                        <button type="submit" class="btn btn-check rounded-pill btn-outline-secondary btn-block">Change</button>
+                        <hr>
+                        <button type="submit" class="btn btn-check rounded-pill btn-outline-secondary btn-block mt-4">Save Changes</button>
                     </form>
                 </div>
+                <div class="card-content mb-5 mt-5 pr-5 pl-5">
+                    <a class="btn btn-check rounded-pill btn-outline-danger btn-block openModal">Delete My Account</a>
+                </div>
+
+                <!-- Modal -->
+                <div class="popup js-popup">
+                    <div class="popup-inner" style="max-width: 800px;">
+                        <div class="close-btn js-close-btn"><i class="fas fa-times"></i></div>
+                        <div class="h3 text-center" style="white-space:nowrap;">Are you sure you want to delete your account?</div>
+                        <div class="pt-4 text-center">
+                            <!-- <button class="rounded-circle border-0 bg-info text-white p-4 mr-3 mt-1 openSecondModal">Info</button> -->
+                            <a href="../actions/remove.php" class="border-0 bg-danger text-white p-3 mr-3 mt-1 openSecondModal">Delete</a>
+                            <a href="editUser.php" class="border-0 bg-secondary text-white mt-1 p-3 me-4 mr-3">Cancel</a>
+                        </div>
+                    </div>
+                    <div class="black-background js-black-bg"></div><!-- background -->
+                </div>
+
             </div>
         </div>
 
 
     </div>
-    <script>//change text with icon
+    <script src="../../script/modal/openmodal.js"></script>
+    <script>
+        //change text with icon
         var label_text = document.getElementById('icon_label');
         // inputのid取得
         var icon = document.getElementById('icon');

@@ -1,6 +1,7 @@
 <?php
 session_start();
 include "../classes/user.php";
+include "../classes/follow.php";
 
 $user_list = "";
 
@@ -40,57 +41,71 @@ $user_list = "";
             </div>
         </nav>
 
-        <div class="d-flex m-0 border-top w-100" style="height:90%;">
-            <div class="w-25">
-                <div class="bg-dark h-100 w-100">
-                    <div class="text-center py-2" style="height:10%;">
-                        <form class="h-100" action="" method="GET">
-
-                            <input type="text" name="search_name" style="padding-left:10px;border-radius:40px;background-color:rgba(100, 100, 100,0.3); outline:none;" class="h-100 text-white border-0" placeholder="SEARCH USERNAME">
-
-                        </form>
-                    </div>
-                </div>
+        <div class="m-0 border-top w-100 h-100">
+            <div class="bg-dark text-center py-2" style="height:10%;">
+                <form class="h-100" action="" method="GET">
+                    <input type="search" name="search_name" style="padding-left:10px;border-radius:40px;background-color:rgba(100, 100, 100,0.3); outline:none;" class="h-100 text-white border-0 w-50" placeholder="SEARCH USERNAME">
+                </form>
             </div>
-            <div class="h-100 text-center w-75">
-                <div class="w-75 m-3 h-25 mx-auto">
+
+
+            <div class="h-100 text-center col-lg-9 col-md-12 mx-auto">
+                <div class="col-lg-9 col-md-12  h-25 mx-auto">
                     <?php
-                    if (isset($_GET['search_name']) && $_GET['search_name'] != "") {
+                    if (isset($_GET['search_name']) && $_GET['search_name'] != "") { //get mthod
                         $username = $_GET['search_name'];
                         $user = new User;
-                        $user_list = $user->searchUser($username);
+                        $user_list = $user->searchUser($username); //array user info
 
-                        while ($user = $user_list->fetch_assoc()) {
-                            if ($_SESSION['user_id'] == $user['id']) {
+                        while ($user_detail = $user_list->fetch_assoc()) {
+                            if ($_SESSION['user_id'] == $user_detail['id']) {
                                 continue;
                             }
                     ?>
-                            <div class="h3 w-100 bg-white m-3" style="white-space: nowrap;">
-                                <div class="d-flex w-100">
-                                    <div class=" w-25 h-100"><img class="p-3" style="border-radius: 50%;display:inline-block;" src="../images/<?= $user['image'] ?>" alt="icon" width="90px" height="90px"></div>
-                                    <a href="" class="pt-2 text-dark  text-decoration-none ml-2 mr-4"><?= $user['username'] ?><p class="h5 text-dark"><?= $user['first_name'] . "  " . $user['last_name'] ?></p></a><br>
-                                    <a href="../actions/follow.php?id=<?= $user['id'] ?>" id="follow" class="btn btn-outline-info m-4">
-                                        FOLLOW
+                            <div class="h3 col-lg-9 col-md-12 bg-white m-3 mx-auto pr-0" style="white-space: nowrap;">
+                                <div class="d-flex col-lg-9 col-md-12 pl-3">
+                                    <div class="w-50 h-100">
+                                        <img class="p-3" style="border-radius: 50%;display:inline-block;" src="../images/<?= $user_detail['image'] ?>" alt="icon" width="90px" height="90px">
+                                    </div>
+                                    <a href="../views/userinfo.php?id=<?= $user_detail['id'] ?>" class="pt-2 text-dark text-decoration-none ml-2 mr-4 w-25">
+                                        <?= $user_detail['username'] ?>
+                                        <p class="text-dark mt-3" style="font-weight: 100;font-size:20px">
+                                            <?= $user_detail['first_name'] . "  " . $user_detail['last_name'] ?>
+                                        </p>
                                     </a>
+                                    <br>
+                                    <?php
+                                    $follow = new Follow;
+                                    $checkfollow_array = $follow->checkFollow($_SESSION['user_id'], $user_detail['id']);
+                                    if ($checkfollow_array->num_rows > 0) {
+                                    ?>
+                                        <a href="../actions/unfollow.php?id=<?= $user_detail['id'] ?>" class="btn btn-outline-danger m-4 ml-lg-5">
+                                            UNFOLLOW
+                                        </a>
+                                    <?php
+                                    } else {
+
+                                    ?>
+                                        <a href="../actions/follow.php?id=<?= $user_detail['id'] ?>" class="btn btn-outline-info m-4 text-right ml-lg-5">
+                                            FOLLOW
+                                        </a>
+                                    <?php
+                                    } ?>
                                 </div>
                             </div>
-                    <?php }
-                    } ?>
+                        <?php }
+                    } else {
+                        ?>
+                        <div class="text-center align-items-center h2 mt-5 font">
+                            SEARCH NAME
+                        </div>
+                    <?php } ?>
                 </div>
             </div>
         </div>
 
     </div>
 
-    <script>
-        const idbtn = document.getElementById('follow');
-        idbtn.addEventListener('click', function() {
-            idbtn.classList.toggle('btn-outline-info');
-            idbtn.classList.toggle('btn-outline-danger');
-            idbtn.textContent = "UNFOLLOW";
-
-        })
-    </script>
 
 </body>
 

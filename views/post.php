@@ -29,7 +29,7 @@ session_start();
     <div id="content" class=" m-0" style="height:100vh;background-color: rgba(0,0,0,0.03);">
         <!-- navigation-bar -->
         <nav class="navbar navbar-expand navbar-dark bg-dark w-100" style="height: 10%;padding-right:-30px;">
-            <a href="#" class="navbar-brand pt-0 mt-0 ">
+            <a href="home.php" class="navbar-brand pt-0 mt-0 ">
                 <p class="my-auto font h4 pl-2">Print</p>
             </a>
             <div class="ml-auto">
@@ -54,7 +54,7 @@ session_start();
                 </div>
             </div>
             <div class="card h-25 mx-auto col-md-6 col-9 mb-3">
-                <textarea style="overflow: hidden;resize:none;outline:none;" class="border-0" name="post_content" id="post_content" cols="30" rows="6"></textarea>
+                <textarea style="overflow: hidden;resize:none;outline:none;" class="border-0" name="post_content" id="post_content" cols="30" maxlength="255" rows="6"></textarea>
             </div>
 
             <div class="mx-auto text-center ">
@@ -73,6 +73,7 @@ session_start();
 
     <script>
         let count = 0;
+
         const countUp = () => {
             let now = new Date;
             let dtf = now.getFullYear().toString() + "/" + (now.getMonth() + 1).toString() + "/" + +now.getDate().toString() + "  " + now.getHours().toString() + ":" + now.getMinutes().toString() + ":" + now.getSeconds().toString();
@@ -85,8 +86,6 @@ session_start();
         var label_text = document.getElementById('post_image_label');
         // inputのid取得
         var image = document.getElementById('post_image');
-        var image_name = $('#post_image')[0].files[0].name
-        var background = document.getElementById('background');
 
         console.log("labeltext.text: " + label_text.textContent);
         console.log("icon.value: " + image.value);
@@ -94,10 +93,10 @@ session_start();
             console.log("after icon.value:" + image.value);
 
             image.value.replace("/C:\\fakepath\\/g", " ");
-            label_text.textContent = image_name.value;
+            label_text.textContent = image.value;
             console.log("after labeltext.value: " + label_text.textContent);
             console.log("after image.value: " + image.value);
-            background.setAttribute('src', label_text);
+
         })
     </script>
 </body>

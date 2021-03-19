@@ -33,35 +33,35 @@
 
 
                 <div class="card w-25 my-auto mx-auto d-table">
-                    <div class="card-header bg-white border-0">
+                    <div class="card-header bg-white border-0 pb-2 pt-2">
                         <h1 class="text-center h1 font " style="white-space:nowrap;">Create account
                         </h1>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body text-center">
                         <form action="../actions/createUser.php" method="POST" enctype="multipart/form-data">
                             <!-- fullname -->
                             <div class="d-flex">
                                 <!-- <input type="text" name="fullname" placeholder="YOURNAME" class="form-control mb-3" required autofocus> -->
                                 <input type="text" name="first_name" placeholder="YOUR FIRSTNAME" class="form-control mb-3 mr-1" required autofocus>
-                                <input type="text" name="last_name" placeholder="YOUR LASTNAME" class="form-control mb-3 ml-1" required >
+                                <input type="text" name="last_name" placeholder="YOUR LASTNAME" class="form-control mb-3 ml-1" required>
                             </div>
                             <!-- username -->
-                            <input type="text" name="username" placeholder="USERNAME" class="form-control mb-3" require>
+                            <input type="text" name="username" placeholder="USERNAME" class="form-control mb-3" minlength="1" required>
                             <!-- icon -->
                             <input type="file" name="icon" id="icon" accept=".jpg,jpeg,png" class="d-none file_input w-100 btn btn-outline-warning text-warning">
                             <label style="margin:0;" for="icon" id="icon_label" class="file_input w-100 btn btn-outline-warning text-left bg-warning text-white ">SELECT ICON</label>
-                            <label style="margin:0;white-space:nowrap;" class=" w-100 mb-1 text-right text-danger d-block">※You need not to decide.</label>
+                            <label style="margin:0;white-space:nowrap;" class=" w-100 mb-1 text-right text-danger d-block">※You can set it up later.</label>
                             <!-- email  -->
-                            <input type="email" name="email" placeholder="EMAIL" class="form-control mb-3" require>
+                            <input type="email" name="email" placeholder="EMAIL" class="form-control mb-3" minlength="3" required>
                             <!-- password -->
-                            <input type="password" name="password" placeholder="PASSWORD" class="form-control mb-3" minlength="6">
+                            <input type="password" name="password" placeholder="PASSWORD" class="form-control mb-3" minlength="6" required>
                             <!-- It compare password.Also If it match, password inserted into database. -->
-                            <input type="password" name="password_second" placeholder="INPUT PASSWORD ONE MORE PLEASE" class="form-control mb-3" minlength="6">
+                            <input type="password" name="password_second" placeholder="INPUT PASSWORD ONE MORE PLEASE" class="form-control mb-3" minlength="8" required>
 
-                            <button type="submit" class="btn btn-check rounded-pill btn-outline-secondary btn-block">Create</button>
+                            <button type="submit" class="btn btn-check rounded-pill btn-outline-secondary btn-block mt-5">Create</button>
                         </form>
                         <hr>
-                        <a href="index.php" type="button" class="btn btn-outline-secondary bg-secondary text-white">back</a>
+                        <a href="index.php" type="button" class="btn btn-outline-secondary bg-secondary text-white">Back to Login</a>
 
 
                     </div>
