@@ -20,5 +20,6 @@ if ($password == $password_second) {
     $newpassword = password_hash($password, PASSWORD_DEFAULT);
     $user->createUser($first_name, $last_name, $username, $email, $icon, $icon_tmp, $newpassword);
 } else {
-    echo "wrang password";
+    header('Location: ../views/createUser.php?err=1');
+    exit;
 }

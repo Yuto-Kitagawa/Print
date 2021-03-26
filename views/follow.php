@@ -14,9 +14,9 @@ $user_list = "";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css4.6/bootstrap.css">
+    <link rel="stylesheet" href="../css4.6/bootstrap.css">
     <script src="https://kit.fontawesome.com/f3d03e8132.js" crossorigin="anonymous"></script>
-    <title>Document</title>
+    <title>Search Name</title>
 </head>
 
 <style>
@@ -65,9 +65,9 @@ $user_list = "";
                             <div class="h3 col-lg-9 col-md-12 bg-white m-3 mx-auto pr-0" style="white-space: nowrap;">
                                 <div class="d-flex col-lg-9 col-md-12 pl-3">
                                     <div class="w-50 h-100">
-                                        <img class="p-3" style="border-radius: 50%;display:inline-block;" src="../images/<?= $user_detail['image'] ?>" alt="icon" width="90px" height="90px">
+                                        <img class="p-3" style="border-radius: 50%;display:inline-block;object-fit:cover" src="../images/<?= $user_detail['image'] ?>" alt="icon" width="90px" height="90px">
                                     </div>
-                                    <a href="../views/userinfo.php?id=<?= $user_detail['id'] ?>" class="pt-2 text-dark text-decoration-none ml-2 mr-4 w-25">
+                                    <a href="../views/userInfoPosts.php?id=<?= $user_detail['id'] ?>" class="pt-2 text-dark text-decoration-none ml-2 mr-4 w-25">
                                         <?= $user_detail['username'] ?>
                                         <p class="text-dark mt-3" style="font-weight: 100;font-size:20px">
                                             <?= $user_detail['first_name'] . "  " . $user_detail['last_name'] ?>
@@ -79,14 +79,13 @@ $user_list = "";
                                     $checkfollow_array = $follow->checkFollow($_SESSION['user_id'], $user_detail['id']);
                                     if ($checkfollow_array->num_rows > 0) {
                                     ?>
-                                        <a href="../actions/unfollow.php?id=<?= $user_detail['id'] ?>" class="btn btn-outline-danger m-4 ml-lg-5">
+                                        <a href="../actions/unfollow.php?id=<?= $user_detail['id'] ?>" class="btn btn-outline-danger m-4 ml-lg-5 align-items-center d-flex">
                                             UNFOLLOW
                                         </a>
                                     <?php
                                     } else {
-
                                     ?>
-                                        <a href="../actions/follow.php?id=<?= $user_detail['id'] ?>" class="btn btn-outline-info m-4 text-right ml-lg-5">
+                                        <a href="../actions/follow.php?id=<?= $user_detail['id'] ?>" class="btn btn-outline-info ml-5 mb-4 mt-4 text-right ml-lg-5 align-items-center d-flex">
                                             FOLLOW
                                         </a>
                                     <?php
@@ -96,7 +95,7 @@ $user_list = "";
                         <?php }
                     } else {
                         ?>
-                        <div class="text-center align-items-center h2 mt-5 font">
+                        <div class="text-center align-items-center h2 mt-5 font user-select-none">
                             SEARCH NAME
                         </div>
                     <?php } ?>

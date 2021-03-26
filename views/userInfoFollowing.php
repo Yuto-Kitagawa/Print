@@ -21,11 +21,11 @@ $posts = $post_obj->getUserPost($id);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css4.6/bootstrap.css">
-    <link rel="stylesheet" href="../../css4.6/modal/modal.css">
+    <link rel="stylesheet" href="../css4.6/bootstrap.css">
+    <link rel="stylesheet" href="../css4.6/modal/modal.css">
 
     <script src="https://kit.fontawesome.com/f3d03e8132.js" crossorigin="anonymous"></script>
-    <title>userinfo</title>
+    <title>User - Following</title>
     <style>
         .font {
             font-family: "Showcard Gothic";
@@ -58,48 +58,55 @@ $posts = $post_obj->getUserPost($id);
             <div class="popup-inner">
                 <div class="close-btn js-close-btn"><i class="fas fa-times"></i></div>
                 <div class="h3 font">Profile</div>
-                <div class="pt-4 w-100 h-100">
-                    <!-- <button class="rounded-circle border-0 bg-info text-white p-4 mr-3 mt-1 openSecondModal">Info</button> -->
-                    <div class="w-25 h-100 mb-5">
-                        <a style="border-radius: 5px;" href="home.php" class="border-0 bg-info text-white w-100 h-100 p-3">Home</a><br>
-                    </div>
-                    <div class="w-25 h-100">
-                        <a style="border-radius: 5px;" href="editUser.php" class=" border-0 bg-primary text-white w-100 p-3 h-100">Edit</a>
-                    </div>
+                <div class="pt-4 d-inline-flex flex-wrap">
+                    <a href="home.php" class="border-0 bg-success text-white p-3 mr-2" style="border-radius:22px">Home</a>
+                    <a href="userInfoPosts.php?id=<?= $_SESSION['user_id'] ?>" class=" border-0 bg-info text-white p-3 mr-2" style="border-radius:22px">My Posts</a>
+                    <a href="userInfoFollowing.php?id=<?= $_SESSION['user_id'] ?>" class=" border-0 bg-danger text-white p-3 mr-2" style="border-radius:22px">My Follow List</a>
+                    <a href="editUser.php" class=" border-0 bg-primary text-white p-3" style="border-radius:22px">Profile Edit</a>
                 </div>
             </div>
-            <div class=" black-background js-black-bg">
-            </div><!-- background -->
+            <div class="black-background js-black-bg"></div><!-- background -->
         </div>
+
         <div class="col-lg-12 card mx-auto p-0 pt-5 d-flex" style="border-bottom: none;">
             <div class="card-body text-center p-0 mx-auto col-md-6">
                 <img src="../images/<?= $user_array['image'] ?>" alt="" width="auto" height="300px">
                 <!-- content -->
                 <div class="h2 mt-3 pt-3 mr-5" style="white-space:nowrap;">
                     <div class="d-flex justify-content-around pl-4">
-                        <div class="text-left pl-4">
-                            <?= $user_array['username'] ?>
+                        <!-- user name -->
+                        <div class="text-left d-flex align-items-center pl-5 ml-5 h2">
+                            <?= "@" . $user_array['username'] ?>
                         </div>
+                        <!-- setting or follow or unfollow button -->
                         <div class="text-right">
                             <?php
-
                             $user_id = $_SESSION['user_id'];
                             $follow_id = $_GET['id'];
                             $checkfollow_array = $follow_obj->checkFollow($user_id, $follow_id);
                             if ($user_id == $follow_id) {
                             ?>
                                 <a href="../views/editUser.php" class="text-right mt-3 h2 w-100 text-dark">
-                                    <i class="fas fa-cogs mt-3 ml-5" style="cursor: pointer;"></i>
+                                    <i class="fas fa-cogs mt-3 ml-5 mb-3" style="cursor: pointer;"></i>
                                 </a>
                             <?php
                             } else if ($checkfollow_array->num_rows > 0) {
                             ?>
-                                <a href="../actions/unfollow.php?id=<?= $follow_id ?>" class="btn btn-outline-danger m-4 ml-lg-5">
-                                    UNFOLLOW
-                                </a>
+                                <div class="d-flex">
+                                    <a href="../views/chat.php?id=<?= $id ?>" class="btn btn-outline-info mb-4 mt-4">
+                                        Chat
+                                    </a>
+                                    <a href="../actions/unfollow.php?id=<?= $follow_id ?>" class="btn btn-outline-danger mb-4 mt-4 ml-3">
+                                        UNFOLLOW
+                                    </a>
+                                </div>
                             <?php
                             } else {
-                                die('Error: display button');
+                            ?>
+                                <a href="../actions/follow.php?id=<?= $id ?>" class="btn btn-outline-info mb-2 mt-2 d-flex">
+                                    FOLLOW
+                                </a>
+                            <?php
                             }
                             ?>
                         </div>
@@ -143,7 +150,7 @@ $posts = $post_obj->getUserPost($id);
                                 $user_detail = $user_obj->getUser($following_user_array['following']);
                                 ?>
                                 <div class="w-25 h-100">
-                                    <img class="p-3" style="border-radius: 50%;display:inline-block;" src="../images/<?= $user_detail['image'] ?>" alt="icon" width="90px" height="90px">
+                                    <img class="p-3" style="border-radius: 50%;display:inline-block;object-fit:cover" src="../images/<?= $user_detail['image'] ?>" alt="icon" width="90px" height="90px">
                                 </div>
                                 <a href="../views/userInfoPosts.php?id=<?= $user_detail['id'] ?>" class="pt-2 text-dark text-decoration-none ml-2 mr-4 w-75 pr-5 h2">
                                     <?= $user_detail['username'] ?>
@@ -151,6 +158,26 @@ $posts = $post_obj->getUserPost($id);
                                         <?= $user_detail['first_name'] . "  " . $user_detail['last_name'] ?>
                                     </p>
                                 </a>
+                                <!-- follow or unfollow button -->
+                                <?php
+                                $follow = new Follow;
+                                $checkfollow_array = $follow->checkFollow($_SESSION['user_id'], $user_detail['id']);
+                                if ($checkfollow_array->num_rows > 0) {
+                                    if ($_SESSION['user_id'] == $user_detail['id']) {
+                                    } else {
+                                ?>
+                                        <a href="../actions/unfollow.php?id=<?= $user_detail['id'] ?>" class="btn btn-outline-danger mt-4 mb-4 mr-4 m-1 align-items-center d-flex" style="height: 40px;">
+                                            UNFOLLOW
+                                        </a>
+                                    <?php
+                                    }
+                                } else {
+                                    ?>
+                                    <a href="../actions/follow.php?id=<?= $user_detail['id'] ?>" class="btn btn-outline-info mt-4 mb-4 mr-4 m-1 text-right align-items-center d-flex" style="height: 40px;">
+                                        FOLLOW
+                                    </a>
+                                <?php
+                                } ?>
                                 <br>
                             </div>
                         </div>
@@ -167,7 +194,7 @@ $posts = $post_obj->getUserPost($id);
                 <a href="post.php" style="background-color: sienna;" class="btn border-0 text-white rounded-circle pr-4 pl-4 pb-3 pt-3 post"><i class="fas fa-plus"></i></a>
             </div>
         </div>
-        <script src="../../script/modal/openmodal.js"></script>
+        <script src="../script/modal/openmodal.js"></script>
 
 </body>
 

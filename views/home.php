@@ -12,10 +12,10 @@ include "../classes/post.php";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css4.6/bootstrap.css">
-    <link rel="stylesheet" href="../../css4.6/modal/modal.css">
+    <link rel="stylesheet" href="../css4.6/bootstrap.css">
+    <link rel="stylesheet" href="../css4.6/modal/modal.css">
     <script src="https://kit.fontawesome.com/f3d03e8132.js" crossorigin="anonymous"></script>
-    <title>Print Home</title>
+    <title>Print</title>
 </head>
 
 <style>
@@ -32,7 +32,7 @@ include "../classes/post.php";
         position: relative;
         height: 18px;
         z-index: 1;
-        transition: 1s color;
+        transition: 0.6s color;
         will-change: color;
         background-color: white;
         width: 100%;
@@ -43,7 +43,7 @@ include "../classes/post.php";
     }
 
     .button-background {
-        background: red;
+        background: slategrey;
         position: absolute;
         top: 5px;
         /* 12px / 2 = 6px */
@@ -94,7 +94,7 @@ include "../classes/post.php";
     <div id="content" class="row m-0" style="height:100%;background-color: rgba(0,0,0,0.03);">
         <!-- navigation-bar -->
         <nav class="navbar navbar-expand navbar-dark bg-dark w-100 fixed-top" style="height: 10%;padding-right:-30px;z-index:9999">
-            <a href="home.php" class="navbar-brand pt-0 mt-0 ">
+            <a href="home.php" class="navbar-brand pt-0 mt-0">
                 <p class="my-auto font h4 pl-2">Print</p>
             </a>
             <a href="follow.php" style="background-color:rgba(200,200,200,0.3); padding:10px 14px 10px 14px; " class="btn text-white rounded-circle "><i class="fas fa-search-plus"></i></a>
@@ -113,8 +113,11 @@ include "../classes/post.php";
                 <div class="h3 font">Profile</div>
                 <div class="pt-4">
                     <!-- <button class="rounded-circle border-0 bg-info text-white p-4 mr-3 mt-1 openSecondModal">Info</button> -->
-                    <a href="userInfoPosts.php?id=<?= $_SESSION['user_id'] ?>" class="rounded-circle border-0 bg-info text-white p-4 mr-3 mt-1 openSecondModal">Info</a>
-                    <a href="editUser.php" class="rounded-circle border-0 bg-primary text-white mt-1 p-4 me-4 mr-3">Edit</a>
+                    <a href="userInfoPosts.php?id=<?= $_SESSION['user_id'] ?>" class=" border-0 bg-info text-white p-4 mr-3 mt-1 " style="border-radius:22px">My Posts</a>
+                    <a href="userInfoFollowing.php?id=<?= $_SESSION['user_id'] ?>" class=" border-0 bg-danger text-white p-4 mr-3 mt-1 " style="border-radius:22px">My Follow List</a>
+                    <a href="editUser.php" class=" border-0 bg-primary text-white mt-1 p-4 me-4 mr-3" style="border-radius:22px">Profile Edit</a>
+                    <br>
+
                 </div>
             </div>
             <div class="black-background js-black-bg"></div><!-- background -->
@@ -123,27 +126,45 @@ include "../classes/post.php";
 
     <!-- leftside of the page -->
     <div class="card font fixed-top" style="height: 100vh; width: 280px;padding-top:68px;">
-        <a href="../views/userInfoPosts.php?id=<?= $_SESSION['user_id'] ?>" style="margin-bottom:8px;">
+        <a href="../views/userInfoPosts.php?id=<?= $_SESSION['user_id'] ?>">
             <button style="font-size: 22px; ">
-                User Posts
+                My Posts
                 <div class="button-background button-background-start"></div>
                 <div class="button-background button-background-end"></div>
             </button>
         </a>
         <a href="../views/editUser.php">
             <button style="font-size: 22px;">
-                Edit User Infomation
+                Edit My Profile
+                <div class="button-background button-background-start"></div>
+                <div class="button-background button-background-end"></div>
+            </button>
+        </a>
+        <a href="../views/userInfoFollowing.php?id=<?= $_SESSION['user_id'] ?>">
+            <button style="font-size: 22px;">
+                Follow List
+                <div class="button-background button-background-start"></div>
+                <div class="button-background button-background-end"></div>
+            </button>
+        </a>
+        <a href="../views/userInfoFollower.php?id=<?= $_SESSION['user_id'] ?>">
+            <button style="font-size: 22px;">
+                Follower List
                 <div class="button-background button-background-start"></div>
                 <div class="button-background button-background-end"></div>
             </button>
         </a>
     </div>
 
+
+    <!-- main content -->
     <div class="pt-5 h-100 content d-flex">
-        <!-- main content -->
         <div id="content" class="row m-0" style="height:100%;background-color: rgba(0,0,0,0.03);">
-            <div class=" col-md-12  col-lg-6 card　mt-5 mx-auto" style="margin-bottom:200px;">
-                <div class="card-content w-100">
+
+
+            <!-- post content -->
+            <div class=" col-md-12  col-lg-6 card　mt-5 mx-auto" style="margin-bottom:250px">
+                <div class="card-content">
                     <?php
                     $user_obj = new User; //user_obj instance
                     $follow_obj = new Follow; //follow_obj instance
@@ -153,42 +174,51 @@ include "../classes/post.php";
                     $id = $_SESSION['user_id']; //this user_id
                     $following = $follow_obj->getFollowingUser($id); //followingにfollowしてる人のidが格納
                     $follow_id = $following->fetch_assoc();
-                    $posts = $posts_obj->getLatestPost($follow_id);
+                    $posts = $posts_obj->getLatestPost($follow_id['following']);
                     if ($posts->num_rows == 0) {
                     ?>
-                        <div class="m-3 h-100 pl-5" style="height:75vh !important; user-select:none;padding-left:40vw;">
-                            <div class="d-flex pl-5 w-100">
-                                <a class="btn btn-outline-secondary" href="../views/follow.php">Let's Follow someone!</a>
+                        <div class="m-3 h-100 pl-5 ">
+                            <div class=" d-flex pl-5" style="margin-left:20vw;margin-right:53vw;margin-bottom:17vh;padding-top:30%">
+                                <a style="white-space: nowrap;" class=" btn btn-outline-secondary" href="../views/follow.php">Let's Follow someone!</a>
                             </div>
                         </div>
                         <?php
                     } else {
                         while ($post_result = $posts->fetch_assoc()) {
-
-                            $userImage = $user_obj->getUserImage($post_result['following']);
                             $userDetail = $user_obj->getUser($post_result['following']);
                         ?>
                             <br>
-                            <div class="bg-white m-3 card">
-                                <div class="d-flex align-items-center">
-                                    <img class="m-2 rounded-circle" src="../images/<?= $userImage['image'] ?>" alt="" width="50px" height="50px">
+                            <div class="bg-white card w-100" style="margin-left:13vw;margin-right:20vw;margin-top:30px;">
+                                <div class="d-flex align-items-center w-100">
+                                    <div style="width: 60px;">
+                                        <img class="m-2 rounded-circle" src="../images/<?= $userDetail['image'] ?>" style="object-fit:cover" alt="" width="50px" height="50px">
+                                    </div>
                                     <a href="../views/userInfoPosts.php?id=<?= $post_result['following'] ?>" class="h3 pl-4 text-dark"><?= $userDetail['username']; ?></a>
 
                                     <?php
                                     if ($_SESSION['user_id'] == $userDetail['id']) {
                                     ?>
-                                        <div class="text-right w-100">
-                                            <a href="../actions/editPostSelect.php?id=<?= $post_result['id'] ?>" class="btn btn-outline-info lead text-right" name="edit">Edit the post</a>
+                                        <div class="text-right w-100 mr-5">
+                                            <a href="../actions/editPostSelect.php?id=<?= $post_result['id'] ?>" class="btn btn-outline-info lead text-right" name="edit" style="white-space:nowrap"><i class="fas fa-pen"></i></a>
                                         </div>
-                                        <div class="text-right w-50 pr-2" style="right:0">
-                                            <a href="../actions/deletePost.php?id=<?= $post_result['id'] ?>" class="btn btn-outline-danger lead text-right" name="delete">Delete the post</a>
+                                        <div class="text-right mr-4" style="right:0;width:10%;">
+                                            <a href="../actions/deletePost.php?id=<?= $post_result['id'] ?>" class="btn btn-outline-danger lead text-right" name="delete" style="white-space:nowrap"><i class="fas fa-trash-alt"></i></a>
                                         </div>
                                     <?php } ?>
                                 </div>
-                                <img src="../images/<?= $post_result['image'] ?>" alt="" width="100%" height="100%">
+                                <!--think about only text -->
+                                <?php
+                                if ($post_result['image'] == null) {
+                                ?>
+                                    <img src="" alt=" " class="d-none" width="100%" height="100%">
+                                <?php
+                                } else { ?>
+                                    <img src="../images/<?= $post_result['image'] ?>" alt=" " width="100%" height="100%">
+                                <?php } ?>
                                 <hr style="margin: 0;">
-                                <p class="pl-5 pr-5 pt-2 font-weight-bold" style="font-size: 20px;"><?= $post_result['content'] ?></p>
-                                <p class="text-left m-0 ml-3 lead" style="font-size: 15px;"><?= $post_result['time']  ?></p>
+                                <p class="pl-5 pr-5 pt-3 pb-3 lead" style="font-size: 20px;margin:0;"><?= $post_result['content'] ?></p>
+                                <hr style="margin:0;">
+                                <p class="text-left m-0 ml-3 lead" style="font-size: 14px;"><?= $post_result['time']  ?></p>
                             </div>
 
                     <?php }
@@ -196,9 +226,8 @@ include "../classes/post.php";
                 </div>
             </div>
 
-
             <!-- post_buttom -->
-            <div style="z-index: 999;right:10%;bottom:10%;" class="position-fixed">
+            <div style="z-index: 999;right:6%;bottom:10%;" class="position-fixed">
                 <a href="post.php" style="background-color: sienna;" class="btn border-0 text-white rounded-circle pr-4 pl-4 pb-3 pt-3 post"><i class="fas fa-plus"></i></a>
             </div>
 
@@ -237,7 +266,7 @@ include "../classes/post.php";
             }
         }
     </script>
-    <script src="../../script/modal/openmodal.js"></script>
+    <script src="../script/modal/openmodal.js"></script>
     <!-- <script>
         const screen = document.getElementById('content');
         // スワイプ／フリック
@@ -280,7 +309,7 @@ include "../classes/post.php";
         const countUp = () => {
             let now = new Date;
             let dtf = now.getFullYear().toString() + "/" + (now.getMonth() + 1).toString() + "/" + +now.getDate().toString() + "  " + now.getHours().toString() + ":" + now.getMinutes().toString() + ":" + now.getSeconds().toString();
-            // console.log(dtf);
+            console.log(dtf);
         }
         setInterval(countUp, 1000);
     </script>

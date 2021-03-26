@@ -24,8 +24,7 @@ class POST extends Database
 
     public function getLatestPost($id)
     {
-        $id_str = current($id);
-        $sql = "SELECT posts.id,follow.following,posts.content,posts.image,posts.time FROM posts INNER JOIN follow ON posts.user_id = follow.following WHERE follow.user_id = $id_str ORDER BY time DESC";
+        $sql = "SELECT posts.id,follow.following,posts.content,posts.image,posts.time FROM posts INNER JOIN follow ON posts.user_id = follow.following WHERE follow.user_id = $id ORDER BY time DESC";
         if ($result = $this->conn->query($sql)) {
             return $result;
         } else {
@@ -35,7 +34,7 @@ class POST extends Database
 
     public function getUserPost($id)
     {
-        $sql = "SELECT * FROM posts WHERE user_id = $id ORDER BY time DESC;";
+        $sql = "SELECT * FROM posts WHERE user_id = $id ORDER BY `time` DESC;";
         if ($result = $this->conn->query($sql)) {
             return $result;
         } else {
@@ -91,4 +90,5 @@ class POST extends Database
             die('Error: Connection database : ' . $this->conn->error);
         }
     }
+
 }

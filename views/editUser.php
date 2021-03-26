@@ -10,9 +10,9 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css4.6/bootstrap.css">
-    <link rel="stylesheet" href="../../css4.6/modal/modal.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="../css4.6/bootstrap.css">
+    <link rel="stylesheet" href="../css4.6/modal/modal.css">
+    <title>Edit User</title>
 </head>
 <style>
     #icon {
@@ -45,18 +45,20 @@ session_start();
             <div class="card">
                 <div class="card-content p-5">
                     <form action="../actions/editUser.php" method="POST" enctype="multipart/form-data">
-                        <div class="h3">Your FirstName: <input class="w-100 " name="editfirstname" type="text" value="<?= $_SESSION['first_name'] ?>"></div>
+                        <div class="w-75 alert alert-danger d-none mx-auto">The Email address is already taken.</div>
+
+                        <div class="h3">Your FirstName: <input class="w-100 " name="editfirstname" type="text" value="<?= $_SESSION['first_name'] ?>" required></div>
                         <hr>
-                        <div class="h3">Your LastName: <input class="w-100" name="editlastname" type="text" value="<?= $_SESSION['last_name'] ?>"></div>
+                        <div class="h3">Your LastName: <input class="w-100" name="editlastname" type="text" value="<?= $_SESSION['last_name'] ?>" required></div>
                         <hr>
-                        <div class="h3">User Name: <input class="w-100" name="editusername" type="text" value="<?= $_SESSION['username'] ?>"></div>
+                        <div class="h3">User Name: <input class="w-100" name="editusername" type="text" value="<?= $_SESSION['username'] ?>" required></div>
                         <hr>
-                        <div class="h3">Email: <input class="w-100" name="editemail" type="text" value="<?= $_SESSION['email'] ?>"></div>
+                        <div class="h3">Email: <input class="w-100" name="editemail" type="text" value="<?= $_SESSION['email'] ?>" required></div>
                         <hr>
                         <div>
                             <input type="file" name="editicon" id="icon" accept=".jpg,jpeg,png" class="file_input w-100 btn btn-outline-warning text-warning">
                             <label style="margin:0;" for="icon" id="icon_label" class="file_input w-100 btn btn-outline-warning text-left bg-warning text-white ">SELECT ICON</label>
-                            <label style="margin:0;white-space:nowrap;user-select:none;" class=" w-100 mb-1 text-right text-danger d-block">※You need not to decide.</label>
+                            <label style="margin:0;white-space:nowrap;user-select:none;" class=" w-100 mb-1 text-right text-danger d-block">※You can set it up later</label>
                         </div>
                         <hr>
                         <button type="submit" class="btn btn-check rounded-pill btn-outline-secondary btn-block mt-4">Save Changes</button>
@@ -103,6 +105,12 @@ session_start();
 
         })
     </script>
+    <?php
+    if (isset($_GET['err']) && $_GET['err'] == 1) {
+        echo "<script> const alertClass = document.getElementsByClassName('alert');
+                 alertClass[0].classList.remove('d-none');
+                 </script>";
+    } ?>
 </body>
 
 </html>

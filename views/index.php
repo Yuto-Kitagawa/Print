@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css4.6/bootstrap.css">
+    <link rel="stylesheet" href="../css4.6/bootstrap.css">
     <title>Login</title>
     <style class="invisible">
         body {
-            background-image: url("../../images/background.jpg");
+            background-image: url("../images/background.jpg");
             background-size: cover;
         }
 
@@ -43,8 +43,8 @@
 
                             <p class="alert alert-danger d-none">The email or password is incorrect.</p>
                             <input type="email" name="email" placeholder="EMAIL" class="form-control mb-3" required autofocus>
-                            <input type="password" name="password" minlength="8" placeholder="PASSWORD" class="form-control mb-5" required>
-                            <button class="btn btn-check rounded-pill btn-outline-secondary btn-block">Log in</button>
+                            <input type="password" name="password" minlength="" placeholder="PASSWORD" class="form-control mb-5" required>
+                            <button type="submit" class="btn btn-check rounded-pill btn-outline-success btn-block">Log in</button>
                         </form>
                         <hr>
                         <p class="btn-outline-light btn mx-auto card w-100 text-center mt-4"><a href="createUser.php" style="white-space:nowrap">Create <br> Account</a></p>
@@ -62,7 +62,7 @@
                  alertClass.classList.remove('d-none');
                  </script>";
     } ?>
-    <script src="../../script/bootstrap.bundle.js"></script>
+    <script src="../script/bootstrap.bundle.js"></script>
 </body>
 
 

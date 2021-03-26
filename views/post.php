@@ -1,4 +1,5 @@
 <?php
+include "../classes/post.php";
 session_start();
 
 ?>
@@ -10,7 +11,7 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css4.6/bootstrap.css">
+    <link rel="stylesheet" href="../css4.6/bootstrap.css">
     <title>Document</title>
 </head>
 <style>
@@ -44,60 +45,55 @@ session_start();
 
         <!-- パソコンがmd -->
         <form action="../actions/post.php" method="POST" enctype="multipart/form-data">
-            <div class="card mx-auto col-md-6 col-9 mb-3 mt-5" id="image">
-                <div class="card-content ">
-                    <div class="bg-white text-center h-25">
-                        <!-- <img src="" alt="pic" class="h-100 w-100" id="background"> -->
-                        <input type="file" id="post_image" name="post_image" class="d-none">
-                        <label for="post_image" id="post_image_label" class="btn btn-outline-info text-white bg-info m-5" name="image_text">SELECT IMAGE</label>
-                    </div>
-                </div>
-            </div>
-            <div class="card h-25 mx-auto col-md-6 col-9 mb-3">
-                <textarea style="overflow: hidden;resize:none;outline:none;" class="border-0" name="post_content" id="post_content" cols="30" maxlength="255" rows="6"></textarea>
-            </div>
+            <div class="card w-50 mx-auto mt-5">
 
-            <div class="mx-auto text-center ">
-                <button type="submit" class="bg-info text-white btn btn-outline-info">POST</button>
+                <!-- picture label -->
+                <div class="w-100 pt-5 pb-5 text-center">
+                    <input type="file" id="post_image" name="post_image" class="d-none">
+                    <label for="post_image" id="post_image_label" class="btn btn-outline-success " name="image_text">SELECT IMAGE</label>
+                </div>
+
+                <!-- textarea -->
+                <div class="card h-25 mx-auto col-md-6 col-9 mb-3 d-none" id="content-wrapper">
+                    <textarea placeholder="text" style="overflow: hidden;resize:none;outline:none;" class="border-0" name="post_content" id="post_content" maxlength="255" cols="30" maxlength="255" rows="6"></textarea>
+                </div>
+
+            </div>
+            <div class="mx-auto text-center mb-5">
+                <button type="button" class="btn btn-outline-success mt-5" id="next">NEXT</button>
+                <button type="submit" class=" btn btn-outline-success d-none mt-5" id="submit">POST</button>
             </div>
         </form>
     </div>
 
-    <!-- <script>
-        const image = document.getElementById('image');
-        image.addEventListener('mouseover', function() {
-            image.classList.toggle('backover');
-            console.log("over now");
-        })
-    </script> -->
-
     <script>
         let count = 0;
-
         const countUp = () => {
             let now = new Date;
             let dtf = now.getFullYear().toString() + "/" + (now.getMonth() + 1).toString() + "/" + +now.getDate().toString() + "  " + now.getHours().toString() + ":" + now.getMinutes().toString() + ":" + now.getSeconds().toString();
-            console.log(dtf);
+            // console.log(dtf);
         }
         setInterval(countUp, 1000);
     </script>
 
     <script>
-        var label_text = document.getElementById('post_image_label');
-        // inputのid取得
+        var next = document.getElementById('next');
+        next.addEventListener('click', function() {
+            var content = document.getElementById('content-wrapper');
+            var submit = document.getElementById('submit');
+            content.classList.remove('d-none');
+            submit.classList.remove('d-none');
+            next.classList.add('d-none')
+        });
+    </script>
+
+    <script>
+        var label_text = document.getElementById('post_image_label'); //select image
         var image = document.getElementById('post_image');
-
-        console.log("labeltext.text: " + label_text.textContent);
-        console.log("icon.value: " + image.value);
         image.addEventListener('change', function() {
-            console.log("after icon.value:" + image.value);
-
-            image.value.replace("/C:\\fakepath\\/g", " ");
+            //change label text
             label_text.textContent = image.value;
-            console.log("after labeltext.value: " + label_text.textContent);
-            console.log("after image.value: " + image.value);
-
-        })
+        });
     </script>
 </body>
 

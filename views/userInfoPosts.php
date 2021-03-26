@@ -21,18 +21,19 @@ $posts = $post_obj->getUserPost($id);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css4.6/bootstrap.css">
-    <link rel="stylesheet" href="../../css4.6/modal/modal.css">
+    <link rel="stylesheet" href="../css4.6/bootstrap.css">
+    <link rel="stylesheet" href="../css4.6/modal/modal.css">
 
     <script src="https://kit.fontawesome.com/f3d03e8132.js" crossorigin="anonymous"></script>
-    <title>userinfo</title>
-    <style>
-        .font {
-            font-family: "Showcard Gothic";
-            font-size: 40px;
-        }
-    </style>
+    <title>User - Posts</title>
+
 </head>
+<style>
+    .font {
+        font-family: "Showcard Gothic";
+        font-size: 40px;
+    }
+</style>
 
 <body style="margin-bottom: 100px; border:0;">
     <div id="content" class="row m-0" style="height:100%;background-color: rgba(0,0,0,0.03);">
@@ -58,50 +59,57 @@ $posts = $post_obj->getUserPost($id);
             <div class="popup-inner">
                 <div class="close-btn js-close-btn"><i class="fas fa-times"></i></div>
                 <div class="h3 font">Profile</div>
-                <div class="pt-4 w-100 h-100">
-                    <!-- <button class="rounded-circle border-0 bg-info text-white p-4 mr-3 mt-1 openSecondModal">Info</button> -->
-                    <div class="w-25 h-100 mb-5">
-                        <a style="border-radius: 5px;" href="home.php" class="border-0 bg-info text-white w-100 h-100 p-3">Home</a><br>
-                    </div>
-                    <div class="w-25 h-100">
-                        <a style="border-radius: 5px;" href="editUser.php" class=" border-0 bg-primary text-white w-100 p-3 h-100">Edit</a>
-                    </div>
+                <div class="pt-4 d-inline-flex flex-wrap">
+                    <a href="home.php" class="border-0 bg-success text-white p-3 mr-2" style="border-radius:22px">Home</a>
+                    <a href="userInfoPosts.php?id=<?= $_SESSION['user_id'] ?>" class=" border-0 bg-info text-white p-3 mr-2" style="border-radius:22px">My Posts</a>
+                    <a href="userInfoFollowing.php?id=<?= $_SESSION['user_id'] ?>" class=" border-0 bg-danger text-white p-3 mr-2" style="border-radius:22px">My Follow List</a>
+                    <a href="editUser.php" class=" border-0 bg-primary text-white p-3" style="border-radius:22px">Profile Edit</a>
                 </div>
             </div>
-            <div class=" black-background js-black-bg">
-            </div><!-- background -->
+            <div class="black-background js-black-bg"></div><!-- background -->
         </div>
 
 
+        <!-- main content -->
         <div class="col-lg-12 card mx-auto p-0 pt-5 d-flex" style="border-bottom: none;">
             <div class="card-body text-center p-0 mx-auto col-md-6">
                 <img src="../images/<?= $user_array['image'] ?>" alt="" width="auto" height="300px">
                 <!-- content -->
                 <div class="h2 mt-3 pt-3 mr-5" style="white-space:nowrap;">
                     <div class="d-flex justify-content-around pl-4">
-                        <div class="text-left pl-4 pt-3">
-                            <?= $user_array['username'] ?>
+                        <!-- user name -->
+                        <div class="text-left d-flex align-items-center pl-5 ml-5 h2">
+                            <?= "@" . $user_array['username'] ?>
                         </div>
+                        <!-- setting or follow or unfollow button -->
                         <div class="text-right">
                             <?php
-
                             $user_id = $_SESSION['user_id'];
                             $follow_id = $_GET['id'];
                             $checkfollow_array = $follow_obj->checkFollow($user_id, $follow_id);
                             if ($user_id == $follow_id) {
                             ?>
                                 <a href="../views/editUser.php" class="text-right mt-3 h2 w-100 text-dark">
-                                    <i class="fas fa-cogs mt-3 ml-5" style="cursor: pointer;"></i>
+                                    <i class="fas fa-cogs mt-3 ml-5 mb-3" style="cursor: pointer;"></i>
                                 </a>
                             <?php
                             } else if ($checkfollow_array->num_rows > 0) {
                             ?>
-                                <a href="../actions/unfollow.php?id=<?= $follow_id ?>" class="btn btn-outline-danger m-4 ml-lg-5">
-                                    UNFOLLOW
-                                </a>
+                                <div class="d-flex">
+                                    <a href="../views/chat.php?id=<?= $id ?>" class="btn btn-outline-info mb-4 mt-4">
+                                        Chat
+                                    </a>
+                                    <a href="../actions/unfollow.php?id=<?= $follow_id ?>" class="btn btn-outline-danger mb-4 mt-4 ml-3">
+                                        UNFOLLOW
+                                    </a>
+                                </div>
                             <?php
                             } else {
-                                die('Error: display button');
+                            ?>
+                                <a href="../actions/follow.php?id=<?= $id ?>" class="btn btn-outline-info mb-2 mt-2 d-flex">
+                                    FOLLOW
+                                </a>
+                            <?php
                             }
                             ?>
                         </div>
@@ -142,33 +150,45 @@ $posts = $post_obj->getUserPost($id);
                             <div class=" text-center">
                                 <div class="d-flex w-100 align-items-center">
                                     <div class="w-25">
-                                        <img class="rounded-circle m-2" src="../images/<?= $user['image'] ?>" alt="" width="50px" height="50px">
+                                        <img class="rounded-circle m-2" src="../images/<?= $user['image'] ?>" style="object-fit:cover" alt="" width="50px" height="50px">
 
                                     </div>
-                                    <div class="w-50 text-left h3" style="white-space: nowrap;">
+                                    <div class="w-50 text-left h4" style="white-space: nowrap;">
                                         <?= $user['username'] ?>
                                     </div>
-                                    <div class="w-50 text-right pr-5 h5">
+                                    <div class="w-50 text-right pr-5 h5 m-0">
                                         <button style="background:none" class="border-0 option">
                                             <?php
                                             if ($_SESSION['user_id'] == $id) {
                                             ?>
-                                                <div class="text-right w-100">
-                                                    <a href="../actions/editPostSelect.php?id=<?= $post_result['id'] ?>" class="btn btn-outline-info lead text-right" name="edit">Edit the post</a>
-                                                </div>
-                                                <div class="text-right w-100" style="right:0">
-                                                    <a href="../actions/deletePost.php?id=<?= $post_result['id'] ?>" class="btn btn-outline-danger lead text-right m-2" name="delete">Delete the post</a>
+                                                <div class="d-flex">
+                                                    <div class="text-right w-100">
+                                                        <a href="../actions/editPostSelect.php?id=<?= $post_result['id'] ?>" style="white-space:nowrap;" class="btn btn-outline-info lead text-right m-2" name="edit"><i class="fas fa-pen"></i></a>
+                                                    </div>
+                                                    <div class="text-right w-100" style="right:0">
+                                                        <a href="../actions/deletePost.php?id=<?= $post_result['id'] ?>" style="white-space:nowrap;" class="btn btn-outline-danger lead text-right m-2" name="delete"><i class="fas fa-trash-alt"></i></a>
+                                                    </div>
                                                 </div>
                                             <?php } ?>
                                         </button>
                                     </div>
                                 </div>
-                                <img class="w-100" src="../images/<?= $post_result['image'] ?>" alt="" width="50%" height="50%">
+                                <!-- think about only text -->
+                                <?php
+                                if ($post_result['image'] == null) {
+                                ?>
+                                    <img src="" alt=" " class="d-none" width="100%" height="100%">
+                                <?php
+                                } else { ?>
+                                    <img src="../images/<?= $post_result['image'] ?>" alt=" " width="100%" height="100%">
+                                <?php } ?>
+                                <!-- <img class="w-100" src="../images/<?= $post_result['image'] ?>" alt="" width="50%" height="50%"> -->
                             </div>
 
-                            <hr class="m-0">
-                            <p class="pl-5 pr-5 pt-2 lead" style="font-size: 20px;"><?= $post_result['content'] ?></p>
-                            <p class="text-left m-0 ml-2" style="font-size: 15px;"><?= $post_result['time']  ?></p>
+                            <hr style="margin: 0;">
+                            <p class="pl-5 pr-5 pt-3 pb-3 lead" style="font-size: 20px;margin:0;"><?= $post_result['content'] ?></p>
+                            <hr style="margin:0;">
+                            <p class="text-left m-0 ml-3 lead" style="font-size: 13px;"><?= $post_result['time']  ?></p>
                         </div>
                     </div>
                 <?php
@@ -188,7 +208,7 @@ $posts = $post_obj->getUserPost($id);
             option_id.classList.remove('invisible');
         })
     </script>
-    <script src="../../script/modal/openmodal.js"></script>
+    <script src="../script/modal/openmodal.js"></script>
 
 </body>
 

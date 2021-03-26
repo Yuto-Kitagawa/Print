@@ -12,7 +12,8 @@ $image_tmp = $_FILES['post_image']['tmp_name'];
 
 
 date_default_timezone_set('Asia/Tokyo');
-$time = date("Y/m/d H:i:s");
+// $time = date("Y/m/d H:i:s");
+$time = date("M d, Y  H:i");
 
 $post = new POST;
 $post->uploadPost($id, $content, $image, $image_tmp, $time);

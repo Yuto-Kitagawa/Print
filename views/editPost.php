@@ -10,8 +10,8 @@ session_start();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../css4.6/bootstrap.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="../css4.6/bootstrap.css">
+    <title>Edit Post</title>
 </head>
 <style>
     .font {
@@ -21,7 +21,6 @@ session_start();
 
     .backover {
         background-color: rgba(0, 0, 0, 0.03);
-
     }
 </style>
 
@@ -49,7 +48,13 @@ session_start();
                     <div class="bg-white text-center h-25">
                         <!-- <img src="" alt="pic" class="h-100 w-100" id="background"> -->
                         <input type="file" id="post_image" name="post_image" class="d-none">
-                        <label for="post_image" id="post_image_label" class="btn btn-outline-info text-white bg-info m-5" name="image_text"><?= $_SESSION['post_image'] ?></label>
+                        <?php
+                        if ($_SESSION['post_image'] == null) { ?>
+                            <label for="post_image" id="post_image_label" class="btn btn-outline-success m-5" name="image_text">SELECT IMAGE</label>
+                        <?php
+                        } else { ?>
+                            <label for="post_image" id="post_image_label" class="btn btn-outline-success m-5" name="image_text"><?= $_SESSION['post_image'] ?></label>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
@@ -58,7 +63,7 @@ session_start();
             </div>
 
             <div class="mx-auto text-center ">
-                <button type="submit" class="bg-info text-white btn btn-outline-info">POST</button>
+                <button type="submit" class="btn btn-outline-success">POST</button>
             </div>
         </form>
     </div>

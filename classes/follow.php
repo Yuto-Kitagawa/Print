@@ -1,6 +1,6 @@
 <?php
 require_once "database.php";
-class Follow extends database
+class Follow extends Database
 {
     public function followUser($user_id, $follow_id) //adduser = follow id , $id = my id
     {
@@ -74,7 +74,7 @@ class Follow extends database
 
     public function getFollower($id)
     {
-        $sql = "SELECT `following` from follow WHERE `following` = $id ";
+        $sql = "SELECT `user_id`,`following` from follow WHERE `following` = $id ";
         if ($result = $this->conn->query($sql)) {
             return $result;
         } else {
